@@ -60,3 +60,8 @@ Report/**/*.tex
 .env.*
 
 # Note: data directories (e.g., data/, examples/*/data/) are intentionally NOT ignored
+# Keep only MNIST from vendored examples; ignore all other example folders
+examples/*
+!examples/mnist/
+!examples/mnist/**
+examples/.git-embedded-backup/

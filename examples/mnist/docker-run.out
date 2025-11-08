@@ -1,0 +1,9 @@
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+Traceback (most recent call last):
+  File "/app/main.py", line 141, in <module>
+    main()
+  File "/app/main.py", line 97, in main
+    use_accel = not args.no_accel and torch.accelerator.is_available()
+  File "/opt/conda/lib/python3.10/site-packages/torch/__init__.py", line 1938, in __getattr__
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+AttributeError: module 'torch' has no attribute 'accelerator'
