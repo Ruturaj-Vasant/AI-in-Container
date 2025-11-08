@@ -9,30 +9,48 @@ This project trains a neural network on MNIST inside a Docker container to ensur
 - Machine: MacBook M3 (Apple Silicon, ARM64)
 - Docker: 28.5.1
 - Base image: `pytorch/pytorch:latest`
-- Key files: `examples/mnist/main.py`, `Dockerfile`, `Report/Report.tex`
+- Key files: `examples/mnist/main.py`, `examples/mnist/Dockerfile`, `Report/Report.pdf`
 
 ## Key Paths
 - Training script (modified): `examples/mnist/main.py`
 - Experiment runner: `examples/mnist/mnist_experiments.py`
 - Dockerfile: `examples/mnist/Dockerfile`
-- Dataset cache (auto-downloaded): `examples/data/`
-- Report sources: `Report/Report.tex`, compiled PDF: `Report/Report.pdf`
+- Dataset cache:
+  - Inside container: `/data` (bind-mount recommended for reuse)
+  - On host: create and mount `./data` from repo root
+- Report: `Report/Report.pdf`
 
 ## Quick Start (Docker)
-1) Build the image:
+1) Build the image (from repo root):
 ```
-docker build -t mnist-train .
+docker build -t mnist-train -f examples/mnist/Dockerfile examples/mnist
 ```
-2) Run training with default args:
+On Apple Silicon you can specify platform if needed:
 ```
-docker run --rm mnist-train
-```
-3) Capture logs for analysis:
-```
-docker run --rm mnist-train | tee training_log.txt
+docker build --platform=linux/arm64/v8 -t mnist-train -f examples/mnist/Dockerfile examples/mnist
 ```
 
-You can modify hyperparameters (e.g., epochs, batch size, learning rate) by updating the `CMD` in the `Dockerfile` or by passing arguments if the entry script supports them, then rebuild and re-run.
+2) Run training with dataset cache mounted (recommended):
+```
+mkdir -p data
+docker run --rm -v "$PWD/data:/data" mnist-train
+```
+
+3) Override hyperparameters at runtime (examples):
+```
+docker run --rm -v "$PWD/data:/data" mnist-train python main.py --epochs 5 --batch-size 64 --lr 0.01
+docker run --rm -v "$PWD/data:/data" mnist-train python main.py --epochs 10 --batch-size 256 --lr 0.005
+```
+
+4) Capture logs for analysis:
+```
+docker run --rm -v "$PWD/data:/data" mnist-train | tee examples/mnist/docker-run.out
+```
+
+You can also run the experiment harness on the host to sweep hyperparameters and generate plots:
+```
+python examples/mnist/mnist_experiments.py
+```
 
 ## Outputs and Logs
 Defaults when running `mnist_experiments.py` from `examples/mnist/`:
@@ -56,17 +74,29 @@ Average results from representative runs:
 ## Figures
 The report includes screenshots of the build and run process:
 
-![Docker build](Report/Docker_Build.png)
+![Docker build](Report/Docker_Build_0.png)
 
 ![Docker run (init)](Report/Docker_run.png)
 
 ![Training output](Report/Docker_run2.png)
 
+## Workflow (from Report)
+- Environment setup (Docker + base image `pytorch/pytorch:latest`), files: `main.py`, `requirements.txt`, custom Dockerfile.
+- Steps: build image, run container, capture logs, iterate hyperparameters and re-run.
+
+## Observations and Results (summary)
+- Increasing epochs improves accuracy but increases time.
+- Larger batch sizes speed up per-epoch training but need more memory.
+- Lower learning rates are more stable and can slightly improve accuracy at the cost of longer training.
+See `Report/Report.pdf` for the full table and plots.
+
+## Discussion and Analysis (summary)
+- Hyperparameters (batch size, epochs, learning rate) control learning dynamics and computational efficiency.
+- Dockerization provides reproducibility; `--no-cache` ensures fresh builds; note arch differences (amd64 vs arm64) on Apple Silicon.
+- Conceptual mapping: containerization/reproducibility, hyperparameter tuning, performance trade-offs, resource management, virtualization & scaling, and portability across architectures.
+
 ## Notes
-- The `examples/` directory is an embedded Git repository. If cloning this repo fresh, use `--recurse-submodules` to fetch it:
-```
-git clone --recurse-submodules git@github.com:Ruturaj-Vasant/AI-in-Container.git
-```
+- Only `examples/mnist` is included from the upstream examples; other example folders are intentionally ignored.
 - Data directories and PDFs are intentionally tracked; common local artifacts, caches, and virtual environments are ignored via `.gitignore`.
 
 ## References
