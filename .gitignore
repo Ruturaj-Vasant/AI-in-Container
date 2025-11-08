@@ -1,0 +1,59 @@
+# Virtual environments
+mnist/
+.venv/
+venv/
+env/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packaging / build artifacts
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+
+# Testing / coverage / typing
+.pytest_cache/
+.coverage*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Logs and generic outputs
+*.log
+*.out
+
+# LaTeX (keep PDFs)
+*.aux
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+*.lof
+*.lot
+!*.pdf
+
+# Env files / secrets
+.env
+.env.*
+
+# Note: data directories (e.g., data/, examples/*/data/) are intentionally NOT ignored
