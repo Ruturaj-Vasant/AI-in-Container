@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{tabularx}
 \usepackage{geometry}
+\usepackage{placeins} % For \FloatBarrier to stop floats crossing sections
 \usepackage{graphicx} % For including figures
 \geometry{margin=1in}
 \usepackage{hyperref}
@@ -47,38 +48,40 @@ CMD ["python", "main.py", "--epochs=10", "--batch_size=32"]
     \end{verbatim}
     \item Build the Docker image:
     \begin{verbatim}
-docker build -t mnist-train .
+docker build --no-cache -t mnist .
     \end{verbatim}
     \item Run the Docker container with the desired hyperparameters:
     \begin{verbatim}
-docker run --rm mnist-train
+docker run -it mnist
     \end{verbatim}
     \item To capture the output and log it for analysis:
     \begin{verbatim}
-docker run --rm mnist-train | tee training_log.txt
+docker run -it mnist 2>&1 | tee docker-run.out
     \end{verbatim}
     \item Modify hyperparameters such as epochs, batch size, and learning rate by changing the command in the Dockerfile or passing arguments, then repeat the build and run steps to observe effects on accuracy and execution time.
 \end{enumerate}
 
 % Figures showing the workflow steps
-\begin{figure}[h!]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=\textwidth]{Docker_Build.png}
-    \caption{Docker build process showing image creation and dependency installation.}
+    \includegraphics[width=\textwidth]{Docker_Build_0.png}
+    \caption{Docker build command using \texttt{--no-cache} showing image creation and dependency installation.}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{Docker_run.png}
     \caption{Docker container run showing MNIST data download and initialization.}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{Docker_run2.png}
     \caption{Training output showing MNIST model progress and accuracy logs.}
 \end{figure}
 
+% Ensure all figures above are placed before proceeding
+\FloatBarrier
 \section{Observations and Results}
 The table below summarizes the results obtained from different hyperparameter configurations. Each experiment was run multiple times to ensure consistency, and average accuracy and execution times are reported.
 
