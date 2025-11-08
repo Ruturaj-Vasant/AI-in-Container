@@ -49,15 +49,62 @@ Defaults when running `mnist_experiments.py` from `examples/mnist/`:
   - `examples/mnist/accuracy_vs_lr.png`, `examples/mnist/time_vs_lr.png`
 
 ## Observations and Results
-Epochs: Across the epoch sweep (epochs = 1, 3, 5, 10, 15; batch = 64; lr = 0.01), accuracy rises from 92.0% at 1 epoch to 96.0% at 15 epochs, with diminishing returns after roughly 5–10 epochs (95.0% at 5–10). Runtime scales nearly linearly with epochs (approx. 65 s to approx. 916 s), reflecting the expected cost–accuracy trade-off.
+Epochs: Across the epoch sweep (epochs = 1, 3, 5, 10, 15; batch = 64; lr = 0.01), accuracy rises from 92.0% at 1 epoch to 96.0% at 15 epochs, with diminishing returns after roughly 5–10 epochs (95.0% at 5–10). Runtime scales nearly linearly with epochs (approx. 65 s to approx. 916 s), reflecting the expected cost–accuracy trade‑off.
 
 Batch size: At fixed epochs = 5 and lr = 0.01, larger batches reduce wall‑clock time (approx. 364 s at 32 to approx. 252 s at 256) but also reduce accuracy (96.0% to 92.0%), illustrating a throughput–generalization trade‑off.
 
 Learning rate: At epochs = 5 and batch = 64, a very small LR underfits (87.0% at 0.001), while higher LRs improve accuracy (93.0% at 0.005, 95.0% at 0.01, 98.0% at 0.05) with similar runtimes (approx. 300–323 s). This suggests an LR "sweet spot" around 0.01–0.05 for faster convergence without instability on this setup.
 
- 
+### Results Tables
 
-## Workflow (from Report)
+Epoch sweep (batch 64, lr 0.01)
+
+| Epochs | Batch | LR   | Accuracy (%) | Time (s) |
+|-------:|------:|-----:|-------------:|---------:|
+| 1      | 64    | 0.01 | 92.0         | 65.03    |
+| 3      | 64    | 0.01 | 94.0         | 193.68   |
+| 5      | 64    | 0.01 | 95.0         | 330.95   |
+| 10     | 64    | 0.01 | 95.0         | 634.82   |
+| 15     | 64    | 0.01 | 96.0         | 915.94   |
+
+Batch size sweep (epochs 5, lr 0.01)
+
+| Batch | Epochs | LR   | Accuracy (%) | Time (s) |
+|------:|-------:|-----:|-------------:|---------:|
+| 32    | 5      | 0.01 | 96.0         | 363.99   |
+| 64    | 5      | 0.01 | 95.0         | 345.56   |
+| 128   | 5      | 0.01 | 94.0         | 268.55   |
+| 256   | 5      | 0.01 | 92.0         | 251.71   |
+
+Learning rate sweep (epochs 5, batch 64)
+
+| LR    | Epochs | Batch | Accuracy (%) | Time (s) |
+|------:|-------:|------:|-------------:|---------:|
+| 0.001 | 5      | 64    | 87.0         | 323.47   |
+| 0.005 | 5      | 64    | 93.0         | 321.00   |
+| 0.01  | 5      | 64    | 95.0         | 299.51   |
+| 0.05  | 5      | 64    | 98.0         | 306.29   |
+
+<!-- Three-in-a-row accuracy plots (centered) -->
+<div align="center">
+  <img src="examples/mnist/accuracy_vs_epochs.png" alt="Accuracy vs Epochs" width="32%"/>
+  <img src="examples/mnist/accuracy_vs_batch.png" alt="Accuracy vs Batch Size" width="32%"/>
+  <img src="examples/mnist/accuracy_vs_lr.png" alt="Accuracy vs Learning Rate" width="32%"/>
+  <br/>
+  <em>Figure 3. Accuracy for each sweep.</em>
+  <br/>
+</div>
+
+<!-- Three-in-a-row time plots -->
+<p>
+  <img src="examples/mnist/time_vs_epochs.png" alt="Time vs Epochs" width="32%"/>
+  <img src="examples/mnist/time_vs_batch.png" alt="Time vs Batch Size" width="32%"/>
+  <img src="examples/mnist/time_vs_lr.png" alt="Time vs Learning Rate" width="32%"/>
+  <br/>
+  <em>Figure 4. Execution time for each sweep.</em>
+</p>
+
+## Workflow 
 The workflow followed these steps:
 1. Clone the repository containing the MNIST training code:
 ```
@@ -82,10 +129,6 @@ docker run -it mnist
 - Hyperparameters (batch size, epochs, learning rate) control learning dynamics and computational efficiency.
 - Dockerization provides reproducibility; `--no-cache` ensures fresh builds; note arch differences (amd64 vs arm64) on Apple Silicon.
 - Conceptual mapping: containerization/reproducibility, hyperparameter tuning, performance trade-offs, resource management, virtualization & scaling, and portability across architectures.
-
-## Notes
-- Only `examples/mnist` is included from the upstream examples; other example folders are intentionally ignored.
-- Data directories and PDFs are intentionally tracked; common local artifacts, caches, and virtual environments are ignored via `.gitignore`.
 
 ## References
 - Docker: https://docs.docker.com/
