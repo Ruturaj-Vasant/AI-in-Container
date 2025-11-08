@@ -11,6 +11,13 @@ This project trains a neural network on MNIST inside a Docker container to ensur
 - Base image: `pytorch/pytorch:latest`
 - Key files: `examples/mnist/main.py`, `Dockerfile`, `Report/Report.tex`
 
+## Key Paths
+- Training script (modified): `examples/mnist/main.py`
+- Experiment runner: `examples/mnist/mnist_experiments.py`
+- Dockerfile: `examples/mnist/Dockerfile`
+- Dataset cache (auto-downloaded): `examples/data/`
+- Report sources: `Report/Report.tex`, compiled PDF: `Report/Report.pdf`
+
 ## Quick Start (Docker)
 1) Build the image:
 ```
@@ -26,6 +33,16 @@ docker run --rm mnist-train | tee training_log.txt
 ```
 
 You can modify hyperparameters (e.g., epochs, batch size, learning rate) by updating the `CMD` in the `Dockerfile` or by passing arguments if the entry script supports them, then rebuild and re-run.
+
+## Outputs and Logs
+Defaults when running `mnist_experiments.py` from `examples/mnist/`:
+- Docker run captures: `examples/mnist/docker-run-5ep.out`, `examples/mnist/docker-run-b256.out`
+- Experiment CSV: `examples/mnist/mnist_results.csv`
+- Experiment log: `examples/mnist/mnist_experiments.log`
+- Plots:
+  - `examples/mnist/accuracy_vs_epochs.png`, `examples/mnist/time_vs_epochs.png`
+  - `examples/mnist/accuracy_vs_batch.png`, `examples/mnist/time_vs_batch.png`
+  - `examples/mnist/accuracy_vs_lr.png`, `examples/mnist/time_vs_lr.png`
 
 ## Results (sample)
 Average results from representative runs:

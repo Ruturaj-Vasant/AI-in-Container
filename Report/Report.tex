@@ -61,6 +61,23 @@ docker run -it mnist 2>&1 | tee docker-run.out
     \item Modify hyperparameters such as epochs, batch size, and learning rate by changing the command in the Dockerfile or passing arguments, then repeat the build and run steps to observe effects on accuracy and execution time.
 \end{enumerate}
 
+\subsection{Files and Paths}
+Key source files, modified scripts, and outputs used in this assignment:
+\begin{itemize}
+    \item Training script (modified): \verb|examples/mnist/main.py|
+    \item Experiment runner: \verb|examples/mnist/mnist_experiments.py|
+    \item Dockerfile: \verb|examples/mnist/Dockerfile|
+    \item Docker run output captures: \verb|examples/mnist/docker-run-5ep.out|, \verb|examples/mnist/docker-run-b256.out|
+    \item Experiment artifacts (default locations when run from \verb|examples/mnist/|):
+    \begin{itemize}
+        \item Results CSV: \verb|examples/mnist/mnist_results.csv|
+        \item Master log: \verb|examples/mnist/mnist_experiments.log|
+        \item Plots: \verb|examples/mnist/accuracy_vs_epochs.png|, \verb|examples/mnist/time_vs_epochs.png|, \verb|examples/mnist/accuracy_vs_batch.png|, \verb|examples/mnist/time_vs_batch.png|, \verb|examples/mnist/accuracy_vs_lr.png|, \verb|examples/mnist/time_vs_lr.png|
+    \end{itemize}
+    \item Dataset cache (auto-downloaded by \verb|torchvision.datasets.MNIST|): \verb|examples/data/|
+    \item Report sources: \verb|Report/Report.tex| (LaTeX), \verb|Report/Report.pdf| (compiled)
+\end{itemize}
+
 % Figures showing the workflow steps
 \begin{figure}[!htbp]
     \centering
