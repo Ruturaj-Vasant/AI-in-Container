@@ -4,6 +4,7 @@
 \usepackage{geometry}
 \usepackage{placeins} % For \FloatBarrier to stop floats crossing sections
 \usepackage{graphicx} % For including figures
+\usepackage{float}    % For [H] exact placement of figures
 \geometry{margin=1in}
 \usepackage{hyperref}
 % Search for images in current dir and Report/ to support different build roots
@@ -75,23 +76,23 @@ Key source files, modified scripts, and outputs used in this assignment:
         \item Plots: \verb|examples/mnist/accuracy_vs_epochs.png|, \verb|examples/mnist/time_vs_epochs.png|, \verb|examples/mnist/accuracy_vs_batch.png|, \verb|examples/mnist/time_vs_batch.png|, \verb|examples/mnist/accuracy_vs_lr.png|, \verb|examples/mnist/time_vs_lr.png|
     \end{itemize}
     \item Dataset cache (auto-downloaded by \verb|torchvision.datasets.MNIST|): \verb|examples/data/|
-    \item Report sources: \verb|Report/Report.tex| (LaTeX), \verb|Report/Report.pdf| (compiled)
+    \item Report sources: \verb|Report/Report.pdf| (compiled)
 \end{itemize}
 
 % Figures showing the workflow steps
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Docker_Build_0.png}
     \caption{Docker build command using \texttt{--no-cache} showing image creation and dependency installation.}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Docker_run.png}
     \caption{Docker container run showing MNIST data download and initialization.}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Docker_run2.png}
     \caption{Training output showing MNIST model progress and accuracy logs.}
