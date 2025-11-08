@@ -51,6 +51,9 @@ Thumbs.db
 *.lof
 *.lot
 !*.pdf
+\# Ignore LaTeX sources in Report (keep only PDFs)
+Report/*.tex
+Report/**/*.tex
 
 # Env files / secrets
 .env
