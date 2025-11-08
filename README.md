@@ -5,12 +5,6 @@ MNIST-in-Docker assignment demonstrating how to containerize a simple ML workflo
 ## Summary
 This project trains a neural network on MNIST inside a Docker container to ensure portability and reproducibility. Experiments vary epochs, batch size, and learning rate to observe effects on accuracy and execution time. See `Report/Report.pdf` for the full write-up with figures.
 
-## Environment
-- Machine: MacBook M3 (Apple Silicon, ARM64)
-- Docker: 28.5.1
-- Base image: `pytorch/pytorch:latest`
-- Key files: `examples/mnist/main.py`, `examples/mnist/Dockerfile`, `Report/Report.pdf`
-
 ## Key Paths
 - Training script (modified): `examples/mnist/main.py`
 - Experiment runner: `examples/mnist/mnist_experiments.py`
@@ -27,8 +21,12 @@ Follow these simple steps (as in the report):
 ```
 docker build --no-cache -t mnist .
 ```
+2) Write a Dockerfile to set up the environment, specifying the base image, copying necessary files, and setting the command to run the training script:
+```
+CMD ["python", "main.py", "--epochs=10", "--batch_size=32"]
+```
 
-2) Run training:
+3) Run training:
 ```
 docker run -it mnist
 ```
@@ -55,6 +53,52 @@ Batch size: At fixed epochs = 5 and lr = 0.01, larger batches reduce wall‑cloc
 
 Learning rate: At epochs = 5 and batch = 64, a very small LR underfits (87.0% at 0.001), while higher LRs improve accuracy (93.0% at 0.005, 95.0% at 0.01, 98.0% at 0.05) with similar runtimes (approx. 300–323 s). This suggests an LR "sweet spot" around 0.01–0.05 for faster convergence without instability on this setup.
 
+### Results Tables
+<div align="center">
+  <div style="display:inline-block; vertical-align:top; margin: 0 8px;">
+    <div><strong>Epoch sweep (batch 64, lr 0.01)</strong></div>
+    <table>
+      <thead>
+        <tr><th>Epochs</th><th>Batch</th><th>LR</th><th>Accuracy (%)</th><th>Time (s)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td align="right">1</td><td align="right">64</td><td align="right">0.01</td><td align="right">92.0</td><td align="right">65.03</td></tr>
+        <tr><td align="right">3</td><td align="right">64</td><td align="right">0.01</td><td align="right">94.0</td><td align="right">193.68</td></tr>
+        <tr><td align="right">5</td><td align="right">64</td><td align="right">0.01</td><td align="right">95.0</td><td align="right">330.95</td></tr>
+        <tr><td align="right">10</td><td align="right">64</td><td align="right">0.01</td><td align="right">95.0</td><td align="right">634.82</td></tr>
+        <tr><td align="right">15</td><td align="right">64</td><td align="right">0.01</td><td align="right">96.0</td><td align="right">915.94</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display:inline-block; vertical-align:top; margin: 0 8px;">
+    <div><strong>Batch size sweep (epochs 5, lr 0.01)</strong></div>
+    <table>
+      <thead>
+        <tr><th>Batch</th><th>Epochs</th><th>LR</th><th>Accuracy (%)</th><th>Time (s)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td align="right">32</td><td align="right">5</td><td align="right">0.01</td><td align="right">96.0</td><td align="right">363.99</td></tr>
+        <tr><td align="right">64</td><td align="right">5</td><td align="right">0.01</td><td align="right">95.0</td><td align="right">345.56</td></tr>
+        <tr><td align="right">128</td><td align="right">5</td><td align="right">0.01</td><td align="right">94.0</td><td align="right">268.55</td></tr>
+        <tr><td align="right">256</td><td align="right">5</td><td align="right">0.01</td><td align="right">92.0</td><td align="right">251.71</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display:inline-block; vertical-align:top; margin: 0 8px;">
+    <div><strong>Learning rate sweep (epochs 5, batch 64)</strong></div>
+    <table>
+      <thead>
+        <tr><th>LR</th><th>Epochs</th><th>Batch</th><th>Accuracy (%)</th><th>Time (s)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td align="right">0.001</td><td align="right">5</td><td align="right">64</td><td align="right">87.0</td><td align="right">323.47</td></tr>
+        <tr><td align="right">0.005</td><td align="right">5</td><td align="right">64</td><td align="right">93.0</td><td align="right">321.00</td></tr>
+        <tr><td align="right">0.01</td><td align="right">5</td><td align="right">64</td><td align="right">95.0</td><td align="right">299.51</td></tr>
+        <tr><td align="right">0.05</td><td align="right">5</td><td align="right">64</td><td align="right">98.0</td><td align="right">306.29</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 ### Results Tables
 
 Epoch sweep (batch 64, lr 0.01)
@@ -103,27 +147,6 @@ Learning rate sweep (epochs 5, batch 64)
   <br/>
   <em>Figure 4. Execution time for each sweep.</em>
 </p>
-
-## Workflow 
-The workflow followed these steps:
-1. Clone the repository containing the MNIST training code:
-```
-git clone https://github.com/yourusername/mnist-docker.git
-```
-2. Write a Dockerfile to set up the environment, specifying the base image, copying necessary files, and setting the command to run the training script:
-```
-CMD ["python", "main.py", "--epochs=10", "--batch_size=32"]
-```
-3. Build the Docker image:
-```
-docker build --no-cache -t mnist .
-```
-4. Run the Docker container with the desired hyperparameters:
-```
-docker run -it mnist
-```
-
- 
 
 ## Discussion and Analysis (summary)
 - Hyperparameters (batch size, epochs, learning rate) control learning dynamics and computational efficiency.
