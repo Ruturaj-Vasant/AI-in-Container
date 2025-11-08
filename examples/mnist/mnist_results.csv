@@ -1,0 +1,14 @@
+Category,Epochs,Batch Size,Learning Rate,Accuracy (%),Time (s)
+Epoch Sweep,1,64,0.01,92.0,65.03
+Epoch Sweep,3,64,0.01,94.0,193.68
+Epoch Sweep,5,64,0.01,95.0,330.95
+Epoch Sweep,10,64,0.01,95.0,634.82
+Epoch Sweep,15,64,0.01,96.0,915.94
+Batch Sweep,5,32,0.01,96.0,363.99
+Batch Sweep,5,64,0.01,95.0,345.56
+Batch Sweep,5,128,0.01,94.0,268.55
+Batch Sweep,5,256,0.01,92.0,251.71
+LR Sweep,5,64,0.001,87.0,323.47
+LR Sweep,5,64,0.005,93.0,321.0
+LR Sweep,5,64,0.01,95.0,299.51
+LR Sweep,5,64,0.05,98.0,306.29

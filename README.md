@@ -75,14 +75,16 @@ Defaults when running `mnist_experiments.py` from `examples/mnist/`:
   - `examples/mnist/accuracy_vs_batch.png`, `examples/mnist/time_vs_batch.png`
   - `examples/mnist/accuracy_vs_lr.png`, `examples/mnist/time_vs_lr.png`
 
-## Results (sample)
-Average results from representative runs:
+## Observations (from CSV)
+Based on `examples/mnist/mnist_results.csv`:
 
-| Epochs | Batch Size | Learning Rate | Accuracy (%) | Time (s) |
-|-------:|-----------:|--------------:|-------------:|---------:|
-| 10     | 32         | 0.01          | 97.5         | 120      |
-| 20     | 64         | 0.005         | 98.1         | 210      |
-| 30     | 128        | 0.001         | 98.3         | 320      |
+- Epoch sweep (batch 64, lr 0.01): accuracy 92.0% (1) → 94.0% (3) → 95.0% (5–10) → 96.0% (15); time scales ≈65s → ≈916s (diminishing returns after ~5–10 epochs).
+- Batch sweep (epochs 5, lr 0.01): time drops 364s (32) → 252s (256) while accuracy drops 96.0% → 92.0% (throughput vs generalization trade-off).
+- LR sweep (epochs 5, batch 64): 0.001 underfits (87.0%); accuracy improves at 0.005 (93.0%), 0.01 (95.0%), peaking at 0.05 (98.0%) with similar times (~300–323s).
+
+Quick links to plots:
+- Accuracy: `examples/mnist/accuracy_vs_epochs.png`, `examples/mnist/accuracy_vs_batch.png`, `examples/mnist/accuracy_vs_lr.png`
+- Time: `examples/mnist/time_vs_epochs.png`, `examples/mnist/time_vs_batch.png`, `examples/mnist/time_vs_lr.png`
 
 ## Figures
 The report includes screenshots of the build and run process:
