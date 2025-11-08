@@ -21,33 +21,46 @@ This project trains a neural network on MNIST inside a Docker container to ensur
 - Report: `Report/Report.pdf`
 
 ## Quick Start (Docker)
+Follow these steps to reproduce the runs shown in the report.
+
 1) Build the image (from repo root):
 ```
-docker build -t mnist-train -f examples/mnist/Dockerfile examples/mnist
+docker build -t mnist -f examples/mnist/Dockerfile examples/mnist
 ```
 On Apple Silicon you can specify platform if needed:
 ```
-docker build --platform=linux/arm64/v8 -t mnist-train -f examples/mnist/Dockerfile examples/mnist
+docker build --platform=linux/arm64/v8 -t mnist -f examples/mnist/Dockerfile examples/mnist
 ```
 
-2) Run training with dataset cache mounted (recommended):
+2) Prepare a dataset cache and run a default training:
 ```
 mkdir -p data
-docker run --rm -v "$PWD/data:/data" mnist-train
+docker run --rm -v "$PWD/data:/data" mnist
 ```
 
-3) Override hyperparameters at runtime (examples):
+3) Reproduce the specific runs captured in the report (logs saved alongside the script):
 ```
-docker run --rm -v "$PWD/data:/data" mnist-train python main.py --epochs 5 --batch-size 64 --lr 0.01
-docker run --rm -v "$PWD/data:/data" mnist-train python main.py --epochs 10 --batch-size 256 --lr 0.005
+# 5 epochs, batch 64, lr 0.01
+docker run --rm -v "$PWD/data:/data" mnist \
+  python -u main.py --epochs 5 --batch-size 64 --lr 0.01 \
+  2>&1 | tee examples/mnist/docker-run-5ep.out
+
+# Batch size 256 (epochs 5, lr 0.01)
+docker run --rm -v "$PWD/data:/data" mnist \
+  python -u main.py --epochs 5 --batch-size 256 --lr 0.01 \
+  2>&1 | tee examples/mnist/docker-run-b256.out
+
+# Learning rate 0.001 (epochs 5, batch 64)
+docker run --rm -v "$PWD/data:/data" mnist \
+  python -u main.py --epochs 5 --batch-size 64 --lr 0.001 \
+  2>&1 | tee examples/mnist/docker-run-lr001.out
+
+# Default run capture
+docker run --rm -v "$PWD/data:/data" mnist \
+  2>&1 | tee examples/mnist/docker-run.out
 ```
 
-4) Capture logs for analysis:
-```
-docker run --rm -v "$PWD/data:/data" mnist-train | tee examples/mnist/docker-run.out
-```
-
-You can also run the experiment harness on the host to sweep hyperparameters and generate plots:
+4) Optional: run the experiment harness to sweep hyperparameters and generate CSV + plots:
 ```
 python examples/mnist/mnist_experiments.py
 ```
