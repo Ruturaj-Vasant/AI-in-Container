@@ -108,12 +108,41 @@ The table below summarizes the results obtained from different hyperparameter co
     \item Lower learning rates led to more stable training and slightly higher accuracy at the cost of longer training times.
 \end{itemize}
 
+\subsection{Discussion and Analysis}
+
+The MNIST experiments were conducted systematically by varying key hyperparameters: number of epochs, batch size, and learning rate. Each of these parameters directly influences the model's learning dynamics and computational efficiency.
+
+\textbf{Understanding the Parameters:}
+\begin{itemize}
+    \item \textbf{Batch Size:} The number of samples processed before updating model weights. Smaller batches allow more frequent updates, potentially improving convergence at the cost of slower computation, while larger batches increase throughput but may generalize slightly worse.
+    \item \textbf{Epochs:} The number of complete passes through the entire training dataset. Increasing epochs generally improves accuracy until the model begins to overfit.
+    \item \textbf{Learning Rate:} Controls how large a step is taken in the direction of reducing loss. A learning rate too high can cause oscillations or divergence, while one too low can result in very slow convergence.
+\end{itemize}
+
+\textbf{Code Comments and Implementation Insights:}
+A few lines of the modified training script are shown below for clarity:
+\begin{verbatim}
+# Customizable parameters for tuning
+parser.add_argument('--epochs', type=int, default=10, help='Number of training epochs')
+parser.add_argument('--batch-size', type=int, default=64, help='Input batch size for training')
+parser.add_argument('--lr', type=float, default=0.01, help='Learning rate')
+\end{verbatim}
+These parameters were modified across runs to observe the trade-offs between runtime and accuracy. The accuracy was logged and plotted to visualize training performance under different configurations.
+
+\textbf{Dockerization Insights:}
+Building and running the training environment inside Docker provided a consistent runtime across multiple trials. Using the \texttt{--no-cache} flag ensured the latest dependencies, while container isolation prevented host-environment conflicts. The \texttt{amd64} vs \texttt{arm64} warning indicated architectural differences between the base image and the host, an important reproducibility observation when running on Apple Silicon systems.
+
+Overall, the experiments highlighted how small parameter adjustments can substantially affect performance, and how Docker serves as a vital tool for managing reproducibility and portability in machine learning workflows.
+
 \section{Mapping to Concepts}
 This experiment demonstrates key concepts in machine learning and software engineering:
 \begin{itemize}
-    \item \textbf{Containerization:} Using Docker to encapsulate the training environment ensures consistent and reproducible results.
+    \item \textbf{Containerization \/ Reproducibility:} Encapsulating the training environment in Docker ensures consistent, repeatable runs across machines.
     \item \textbf{Hyperparameter Tuning:} Adjusting epochs, batch size, and learning rate to optimize model performance.
-    \item \textbf{Resource Management:} Understanding how different configurations affect execution time and computational resource usage.
+    \item \textbf{Performance Optimization:} Analyzing accuracy vs. computation time to make informed trade-offs.
+    \item \textbf{Resource Management:} Understanding how configurations affect execution time and memory usage.
+    \item \textbf{Virtualization \& Scaling:} The Docker setup mirrors deployment on cloud clusters, connecting classroom concepts of virtualization and resource scaling.
+    \item \textbf{Portability Across Architectures:} Accounting for host\/image differences (e.g., \texttt{amd64} vs. \texttt{arm64}), especially on Apple Silicon.
 \end{itemize}
 
 \section{Key Learnings}
