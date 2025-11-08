@@ -2,8 +2,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage{tabularx}
 \usepackage{geometry}
+\usepackage{graphicx} % For including figures
 \geometry{margin=1in}
 \usepackage{hyperref}
+% Search for images in current dir and Report/ to support different build roots
+\graphicspath{{./}{Report/}}
 
 \title{MNIST-in-Docker Assignment Report}
 \author{Ruturaj Tambe}
@@ -56,6 +59,25 @@ docker run --rm mnist-train | tee training_log.txt
     \end{verbatim}
     \item Modify hyperparameters such as epochs, batch size, and learning rate by changing the command in the Dockerfile or passing arguments, then repeat the build and run steps to observe effects on accuracy and execution time.
 \end{enumerate}
+
+% Figures showing the workflow steps
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{Report/Docker_Build.png}
+    \caption{Docker build process showing image creation and dependency installation.}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{Report/Docker_run.png}
+    \caption{Docker container run showing MNIST data download and initialization.}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{Report/Docker_run2.png}
+    \caption{Training output showing MNIST model progress and accuracy logs.}
+\end{figure}
 
 \section{Observations and Results}
 The table below summarizes the results obtained from different hyperparameter configurations. Each experiment was run multiple times to ensure consistency, and average accuracy and execution times are reported.
